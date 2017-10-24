@@ -17,6 +17,20 @@ func TestIndexMessageParsing(t *testing.T) {
 	}
 }
 
+func TestIndexMessageParsingMakesZeroLengthDepths(t *testing.T) {
+	msg := NewMessage("INDEX|foo|")
+	if msg.cmd != INDEX {
+		t.Error("Expected INDEX got", INDEX, msg.cmd)
+	}
+  if msg.pkg != "foo" {
+		t.Error("Expected pkg foo, got", msg.pkg)
+	}
+	deps := [0]string{}
+	if !reflect.DeepEqual(msg.dep, deps[:]) {
+		t.Error("Expected no deps, got", msg.dep)
+	}
+}
+
 func TestQueryMessageParsing(t *testing.T) {
 	msg := NewMessage("QUERY|foo|bar,biz")
 	if msg.cmd != QUERY {
@@ -79,5 +93,21 @@ func TestErrorMessageParsing(t *testing.T) {
 		t.Error("Expected empty, got", msg.dep)
 	}
 
+	msg = NewMessage("BLINDEX|a|b")
+	if msg.cmd != ERROR {
+		t.Error("Expected ERROR got", ERROR, msg.cmd)
+	}
+  if msg.pkg != "" {
+		t.Error("Expected pkg '', got", msg.pkg)
+	}
+	if len(msg.dep) != 0 {
+		t.Error("Expected empty, got", msg.dep)
+	}
+}
 
+func TestMessageStringer(t *testing.T) {
+	msg := NewMessage("REMOVE|foo|bar,biz")
+	if msg.String() != "[REMOVE|foo|[bar biz]]" {
+		t.Error("Expected [REMOVE|foo|[bar biz]] got", msg.String())
+	}
 }

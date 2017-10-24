@@ -39,7 +39,7 @@ func NewMessage(message string) Message {
 	if len(s) == 0 {
 		return Message{ERROR,"", deps}
 	}
-	if len(s) == 4 {
+	if len(s) == 4 && s[3] != "" {
 		deps = strings.Split(s[3],",")
 	}
 
@@ -53,4 +53,21 @@ func NewMessage(message string) Message {
 	default:
 		return Message{ERROR, "", deps}
 	}
+}
+
+
+func (m Message) String() string {
+	var cmd string
+	switch m.cmd {
+	case INDEX:
+		cmd = "INDEX"
+	case QUERY:
+		cmd = "QUERY"
+	case REMOVE:
+		cmd = "REMOVE"
+	default:
+		cmd = "ERROR"
+	}
+	
+	return fmt.Sprintf("[%s|%s|%v]", cmd, m.pkg, m.dep)
 }

@@ -4,7 +4,10 @@ import (
 	"fmt"
 	"net"
 	"bufio"
+	"os"
 )
+
+var packager = NewPackager()
 
 func main() {
 	startServer(":8080")
@@ -13,35 +16,34 @@ func main() {
 func startServer(port string) {
 	ln, err := net.Listen("tcp", port)
 	if err != nil {
-		handleError(err)
-		return
+		handleError("Listen", err)
+		os.Exit(1)
 	}
 	defer ln.Close()
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			handleError(err)
-			return
+			handleError("Accept", err)
+			os.Exit(1)
 		}
 		go handleConnection(conn)
 	}
 }
 
-func handleError(err error) {
-	fmt.Println("Error:", err)
+func handleError(s string, err error) {
+	fmt.Println("ERROR:", s, err)
 }
 
 func handleConnection(conn net.Conn) {
-	connbuf := bufio.NewReader(conn)
-	for{
-		str, err := connbuf.ReadString('\n')
-		if len(str)>0 {
-			fmt.Println(str)
-		}
-		if err!= nil {
-			handleError(err)
-			break
-		}
-	}
 	defer conn.Close()
+	scanner := bufio.NewScanner(conn)
+	for{
+		scanner.Scan()
+		if err := scanner.Err(); err != nil {
+			handleError("Read", err)
+			break;
+		}
+		msg := NewMessage(scanner.Text())
+		conn.Write([]byte(packager.Process(msg)))
+	}
 }
