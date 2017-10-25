@@ -45,6 +45,13 @@ func handleConnection(conn net.Conn) {
 			break;
 		}
 		msg := NewMessage(scanner.Text())
-		conn.Write([]byte(packager.Process(msg)))
+		fmt.Println(msg)
+		result := packager.Process(msg)
+		fmt.Print(result)
+		_, err := conn.Write([]byte(result))
+		if err != nil {
+			handleError("Write", err)
+			break;
+		}
 	}
 }

@@ -41,11 +41,12 @@ func (p *Packager) index(msg Message) string {
 }
 
 func (p *Packager) remove(msg Message) string {
+	p.mux.Lock()
 	_, ok := p.nodes[msg.pkg]
 	if !ok {
+		p.mux.Unlock()
 		return "OK\n"
 	}
-	p.mux.Lock()
 	for _, v := range p.nodes {
 		for _, dep := range v {
 			if dep == msg.pkg {
@@ -60,8 +61,8 @@ func (p *Packager) remove(msg Message) string {
 }
 
 func (p *Packager) query(msg Message) string {
-	//p.mux.Lock()
-	//defer p.mux.Unlock()
+	p.mux.Lock()
+	defer p.mux.Unlock()
 	if _, ok := p.nodes[msg.pkg]; ok {
 		return "OK\n"
 	}
