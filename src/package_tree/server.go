@@ -26,6 +26,7 @@ func startServer(port string) {
 			handleError("Accept", err)
 			os.Exit(1)
 		}
+
 		go handleConnection(conn)
 	}
 }

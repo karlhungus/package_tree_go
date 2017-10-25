@@ -28,38 +28,40 @@ func (p *Packager) Process(msg Message) string {
 }
 
 func (p *Packager) index(msg Message) string {
-  p.mux.Lock()
-	defer p.mux.Unlock()
+	p.mux.Lock()
 	for _, dep := range msg.dep {
 		if _, present := p.nodes[dep]; !present {
+			p.mux.Unlock()
 			return "FAIL\n"
 		}
 	}
 	p.nodes[msg.pkg] = msg.dep
+	p.mux.Unlock()
 	return "OK\n"
 }
 
 func (p *Packager) remove(msg Message) string {
-	p.mux.Lock()
-	defer p.mux.Unlock()
 	_, ok := p.nodes[msg.pkg]
 	if !ok {
 		return "OK\n"
 	}
+	p.mux.Lock()
 	for _, v := range p.nodes {
 		for _, dep := range v {
 			if dep == msg.pkg {
+				p.mux.Unlock()
 				return "FAIL\n"
 			}
 		}
 	}
 	delete(p.nodes, msg.pkg)
+	p.mux.Unlock()
 	return "OK\n"
 }
 
 func (p *Packager) query(msg Message) string {
-	p.mux.Lock()
-	defer p.mux.Unlock()
+	//p.mux.Lock()
+	//defer p.mux.Unlock()
 	if _, ok := p.nodes[msg.pkg]; ok {
 		return "OK\n"
 	}
