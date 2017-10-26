@@ -11,12 +11,11 @@ func TestWorkerPool(t *testing.T) {
 		workable: func(m InputData) Result {
 			return pkg.Process(m.(Message))
 		},
-  }
+	}
 	pool := NewWorkerPool(1)
 	pool.input <- &w
-	<- pool.output
+	<-pool.output
 	if "OK\n" != w.result {
 		t.Error("Expected OK got", w.result)
 	}
 }
-

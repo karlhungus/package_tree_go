@@ -1,21 +1,20 @@
 package main
 
-import(
+import (
 	"sync"
 )
 
 type Packager struct {
 	nodes map[string][]string
-	mux sync.Mutex
+	mux   sync.Mutex
 }
-
 
 func NewPackager() Packager {
 	return Packager{nodes: make(map[string][]string)}
 }
 
 func (p *Packager) Process(msg Message) string {
-	switch(msg.cmd) {
+	switch msg.cmd {
 	case INDEX:
 		return p.index(msg)
 	case QUERY:

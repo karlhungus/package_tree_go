@@ -1,8 +1,8 @@
-package main 
+package main
 
 import (
-	"regexp"
 	"fmt"
+	"regexp"
 	"strings"
 )
 
@@ -19,7 +19,7 @@ const (
 	ERROR
 )
 
-func(c command) Command() command {
+func (c command) Command() command {
 	return c
 }
 
@@ -37,10 +37,10 @@ func NewMessage(message string) Message {
 	s := r.FindStringSubmatch(message)
 	deps := make([]string, 0)
 	if len(s) == 0 {
-		return Message{ERROR,"", deps}
+		return Message{ERROR, "", deps}
 	}
 	if len(s) == 4 && s[3] != "" {
-		deps = strings.Split(s[3],",")
+		deps = strings.Split(s[3], ",")
 	}
 
 	switch s[1] {
@@ -55,7 +55,6 @@ func NewMessage(message string) Message {
 	}
 }
 
-
 func (m Message) String() string {
 	var cmd string
 	switch m.cmd {
@@ -68,6 +67,6 @@ func (m Message) String() string {
 	default:
 		cmd = "ERROR"
 	}
-	
+
 	return fmt.Sprintf("[%s|%s|%v]", cmd, m.pkg, m.dep)
 }

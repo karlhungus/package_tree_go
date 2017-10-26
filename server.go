@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net"
-	"bufio"
 	"os"
 )
 
@@ -27,7 +27,7 @@ func startServer(port string) {
 			handleError("Accept", err)
 			os.Exit(1)
 		}
-		
+
 		w := Work{
 			input: conn,
 			workable: func(c InputData) Result {
@@ -49,11 +49,11 @@ func handleError(s string, err error) {
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
 	scanner := bufio.NewScanner(conn)
-	for{
+	for {
 		scanner.Scan()
 		if err := scanner.Err(); err != nil {
 			handleError("Read", err)
-			break;
+			break
 		}
 		msg := NewMessage(scanner.Text())
 		fmt.Println(msg)
@@ -62,7 +62,7 @@ func handleConnection(conn net.Conn) {
 		_, err := conn.Write([]byte(result))
 		if err != nil {
 			handleError("Write", err)
-			break;
+			break
 		}
 	}
 }

@@ -8,10 +8,10 @@ func TestIndexMessageParsing(t *testing.T) {
 	if msg.cmd != INDEX {
 		t.Error("Expected INDEX got", INDEX, msg.cmd)
 	}
-  if msg.pkg != "foo" {
+	if msg.pkg != "foo" {
 		t.Error("Expected pkg foo, got", msg.pkg)
 	}
-	deps := [2]string{ "bar", "biz" }
+	deps := [2]string{"bar", "biz"}
 	if !reflect.DeepEqual(msg.dep, deps[:]) {
 		t.Error("Expected dep \"bar\", \"biz\", got", msg.dep)
 	}
@@ -22,7 +22,7 @@ func TestIndexMessageParsingMakesZeroLengthDepths(t *testing.T) {
 	if msg.cmd != INDEX {
 		t.Error("Expected INDEX got", INDEX, msg.cmd)
 	}
-  if msg.pkg != "foo" {
+	if msg.pkg != "foo" {
 		t.Error("Expected pkg foo, got", msg.pkg)
 	}
 	deps := [0]string{}
@@ -36,10 +36,10 @@ func TestQueryMessageParsing(t *testing.T) {
 	if msg.cmd != QUERY {
 		t.Error("Expected QUERY got", QUERY, msg.cmd)
 	}
-  if msg.pkg != "foo" {
+	if msg.pkg != "foo" {
 		t.Error("Expected pkg foo, got", msg.pkg)
 	}
-	deps := [2]string{ "bar", "biz" }
+	deps := [2]string{"bar", "biz"}
 	if !reflect.DeepEqual(msg.dep, deps[:]) {
 		t.Error("Expected dep \"bar\", \"biz\", got", msg.dep)
 	}
@@ -50,10 +50,10 @@ func TestRemoveMessageParsing(t *testing.T) {
 	if msg.cmd != REMOVE {
 		t.Error("Expected REMOVE got", REMOVE, msg.cmd)
 	}
-  if msg.pkg != "foo" {
+	if msg.pkg != "foo" {
 		t.Error("Expected pkg foo, got", msg.pkg)
 	}
-	deps := [2]string{ "bar", "biz" }
+	deps := [2]string{"bar", "biz"}
 	if !reflect.DeepEqual(msg.dep, deps[:]) {
 		t.Error("Expected dep \"bar\", \"biz\", got", msg.dep)
 	}
@@ -64,7 +64,7 @@ func TestErrorMessageParsing(t *testing.T) {
 	if msg.cmd != ERROR {
 		t.Error("Expected ERROR got", ERROR, msg.cmd)
 	}
-  if msg.pkg != "" {
+	if msg.pkg != "" {
 		t.Error("Expected pkg '', got", msg.pkg)
 	}
 	if len(msg.dep) != 0 {
@@ -75,7 +75,7 @@ func TestErrorMessageParsing(t *testing.T) {
 	if msg.cmd != ERROR {
 		t.Error("Expected ERROR got", ERROR, msg.cmd)
 	}
-  if msg.pkg != "" {
+	if msg.pkg != "" {
 		t.Error("Expected pkg '', got", msg.pkg)
 	}
 	if len(msg.dep) != 0 {
@@ -86,7 +86,7 @@ func TestErrorMessageParsing(t *testing.T) {
 	if msg.cmd != ERROR {
 		t.Error("Expected ERROR got", ERROR, msg.cmd)
 	}
-  if msg.pkg != "" {
+	if msg.pkg != "" {
 		t.Error("Expected pkg '', got", msg.pkg)
 	}
 	if len(msg.dep) != 0 {
@@ -97,7 +97,7 @@ func TestErrorMessageParsing(t *testing.T) {
 	if msg.cmd != ERROR {
 		t.Error("Expected ERROR got", ERROR, msg.cmd)
 	}
-  if msg.pkg != "" {
+	if msg.pkg != "" {
 		t.Error("Expected pkg '', got", msg.pkg)
 	}
 	if len(msg.dep) != 0 {
