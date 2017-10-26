@@ -8,6 +8,7 @@ import (
 )
 
 var packager = NewPackager()
+var pool = NewWorkerPool(20)
 
 func main() {
 	startServer(":8080")
@@ -26,8 +27,18 @@ func startServer(port string) {
 			handleError("Accept", err)
 			os.Exit(1)
 		}
+		
+		w := Work{
+			input: conn,
+			workable: func(c InputData) Result {
+				handleConnection(c.(net.Conn))
+				return 0
+			},
+		}
 
-		go handleConnection(conn)
+		pool.input <- &w
+
+		//go handleConnection(conn)
 	}
 }
 
